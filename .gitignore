@@ -1,6 +1,9 @@
 # Config files
 config/
 mantis_offline.php
+.env
+.env.*
+!.env.example
 
 # Docbook builds
 docbook/*/*/builddate

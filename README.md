@@ -45,6 +45,54 @@ Installation
   scripts within this directory should not be accessible on a live MantisBT
   site or on any installation that is accessible via the Internet.
 
+Docker Compose
+--------------
+
+The included Compose setup builds this checkout with PHP and Apache and runs
+MariaDB in a separate container. Install Docker and the Compose plugin first.
+
+1. Copy `.env.example` to `.env` and replace both database passwords with
+   different strong passwords. Use simple alphanumeric passwords to avoid
+   Compose interpolation issues. Keep `.env` private.
+2. Set `MANTIS_INSTALLER_ENABLED=1` in `.env`, then run:
+
+   ```sh
+   docker compose up -d --build
+   ```
+
+3. Open `http://localhost:8080/admin/install.php` on the Docker host. If Docker
+   runs on a remote ZimaOS server, use an SSH tunnel, for example
+   `ssh -L 8080:127.0.0.1:8080 user@server`, and open that URL on your
+   computer. Keep the installer private: anyone who can reach it can change
+   the installation.
+4. In the installer, select **MySQL Improved** and enter hostname `db`,
+   database `bugtracker`, username `mantis`, and the `MANTIS_DB_PASSWORD`
+   value from `.env`. Leave the database admin username and password blank
+   to use the same user; the database already exists. Complete all installer
+   steps and confirm that the configuration file was written successfully.
+5. Set `MANTIS_INSTALLER_ENABLED=0` in `.env` and run
+   `docker compose up -d` to recreate the app with `/admin` blocked. Log in
+   with the initial `administrator` / `root` account and immediately change
+   its password.
+
+The app is bound to the server's loopback interface by default. Once setup is
+complete, set `MANTIS_BIND_ADDRESS` to the desired server interface (or
+`0.0.0.0` for all interfaces) and run `docker compose up -d` to allow network
+access. Use a firewall and HTTPS reverse proxy before exposing it publicly.
+If the installation URL changes, update `$g_path` in the persistent
+`config/config_inc.php` as appropriate. Configure an SMTP server in that file
+if you need email notifications; the containers do not provide a mail server.
+
+The `mantis-db` and `mantis-config` volumes persist the database and generated
+configuration, including the crypto master salt. Back up both together. File
+attachments are stored in the database by default; if configured to use disk,
+add and back up a persistent upload volume. Changing passwords in `.env` after
+the database has been initialized does not change existing database accounts
+or the saved MantisBT configuration. For upgrades, back up first, rebuild the
+image, temporarily enable the installer to run the database upgrade, then
+disable it again. Do not use `docker compose down -v` unless you intend to
+delete the persistent data.
+
 UPGRADING
 ---------
 

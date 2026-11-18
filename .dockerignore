@@ -1,0 +1,10 @@
+.git
+.github
+.env
+.env.*
+vendor
+**/node_modules
+config/config_inc.php
+config/custom_*
+.vscode
+.idea
