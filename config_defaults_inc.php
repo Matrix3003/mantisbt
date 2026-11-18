@@ -359,7 +359,7 @@ $g_crypto_master_salt = '';
  * @see $g_send_reset_password
  * @global int $g_allow_signup
  */
-$g_allow_signup = ON;
+$g_allow_signup = OFF;
 
 /**
  * Maximum number of failed login attempts before the user's account is locked.
@@ -392,7 +392,7 @@ $g_notify_new_user_created_threshold_min = ADMINISTRATOR;
  *
  * @global int $g_send_reset_password
  */
-$g_send_reset_password = ON;
+$g_send_reset_password = OFF;
 
 /**
  * Use captcha image to validate subscription it requires GD library installed.
@@ -422,7 +422,7 @@ $g_system_font_folder = '';
  *
  * @global int $g_lost_password_feature
  */
-$g_lost_password_feature = ON;
+$g_lost_password_feature = OFF;
 
 /**
  * Max. simultaneous requests of 'lost password'.
@@ -507,7 +507,7 @@ $g_return_path_email = 'admin@example.com';
  *
  * @global int $g_enable_email_notification
  */
-$g_enable_email_notification = ON;
+$g_enable_email_notification = OFF;
 
 /**
  * Send verbose email notifications.
